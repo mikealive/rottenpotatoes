@@ -18,13 +18,17 @@ class MoviesController < ApplicationController
   def index
     @all_ratings=defrating
     @keys=[nil]
-    
+    rating=params[:ratings]
     sort=params[:sort]
     if(sort=='title' || sort=='release_date')
       @movies = Movie.order(sort)
       @sort=sort;
-    else
+    elsif(rating.nil?)
       @movies = Movie.all
+    else
+      keys=rating.keys
+      @keys=keys
+      @movies = Movie.where(rating: keys)
     end
   end
 
