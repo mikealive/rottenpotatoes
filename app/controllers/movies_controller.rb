@@ -18,38 +18,13 @@ class MoviesController < ApplicationController
   def index
     @all_ratings=defrating
     @keys=[nil]
-    if(params[:ratings]!=nil)
-      rating=params[:ratings]
-      session[:ratings]=rating
-      session[:sort]=nil
-    elsif(session[:ratings]!=nil && params[:sort]==nil)   #have to be && to avoid mess
-      rating=session[:ratings]
-      flash.keep
-      redirect_to movies_path(:ratings=>rating)
-    else
-      rating=nil
-    end
-    if(params[:sort]!=nil)
-      sort=params[:sort]
-      session[:sort]=sort
-      session[:ratings]=nil
-    elsif(session[:sort]!=nil && params[:ratings]==nil)
-      sort=session[:sort]
-      flash.keep
-      redirect_to movies_path(:sort=>sort)
-    else
-      sort=nil
-    end
     
+    sort=params[:sort]
     if(sort=='title' || sort=='release_date')
       @movies = Movie.order(sort)
       @sort=sort;
-    elsif(rating.nil?)
-      @movies = Movie.all
     else
-      keys=rating.keys
-      @keys=keys
-      @movies = Movie.where(rating: keys)
+      @movies = Movie.all
     end
   end
 
